@@ -49,7 +49,7 @@ func LoadAndSaveWithConfig(config SessionConfig) echo.MiddlewareFunc {
 			cookie, err := c.Cookie(config.SessionManager.Cookie.Name)
 			if err == nil {
 				token = cookie.Value
-                               fmt.Printf("token = %v\n", token)
+                               fmt.Printf("SCS token = %v\n", token)
 			}
 
 			ctx, err = config.SessionManager.Load(ctx, token)
