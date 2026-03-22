@@ -3,6 +3,7 @@ package session
 import (
 	"net/http"
 	"time"
+"fmt"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/labstack/echo/v4"
@@ -38,6 +39,7 @@ func LoadAndSaveWithConfig(config SessionConfig) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			if config.Skipper(c) {
+                               fmt.Printf("---SCS skipped\n")
 				return next(c)
 			}
 
@@ -46,11 +48,13 @@ func LoadAndSaveWithConfig(config SessionConfig) echo.MiddlewareFunc {
 			var token string
 			cookie, err := c.Cookie(config.SessionManager.Cookie.Name)
 			if err == nil {
+                               fmt.Printf("---SCS cookie error\n")
 				token = cookie.Value
 			}
 
 			ctx, err = config.SessionManager.Load(ctx, token)
 			if err != nil {
+                               fmt.Printf("---SCS load error\n")
 				return err
 			}
 
@@ -69,6 +73,7 @@ func LoadAndSaveWithConfig(config SessionConfig) echo.MiddlewareFunc {
 
 					switch config.SessionManager.Status(ctx) {
 					case scs.Modified:
+                               fmt.Printf("---SCS Session modified\n")
 						token, _, err := config.SessionManager.Commit(ctx)
 						if err != nil {
 							panic(err)
@@ -77,6 +82,7 @@ func LoadAndSaveWithConfig(config SessionConfig) echo.MiddlewareFunc {
 						responseCookie.Value = token
 
 					case scs.Destroyed:
+                               fmt.Printf("---SCS Session Destroyed\n")
 						responseCookie.Expires = time.Unix(1, 0)
 						responseCookie.MaxAge = -1
 					}
