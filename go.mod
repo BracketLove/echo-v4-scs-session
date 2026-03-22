@@ -1,4 +1,4 @@
-module github.com/rbaderts/echo-v4-scs-session
+module github.com/bracketlove/echo-v4-scs-session
 
 go 1.26.1
 
