@@ -68,7 +68,11 @@ func LoadAndSaveWithConfig(config SessionConfig) echo.MiddlewareFunc {
 			c.SetRequest(c.Request().WithContext(ctx))
 
 			c.Response().Before(func() {
-				if config.SessionManager.Status(ctx) != scs.Unmodified {
+				st := config.SessionManager.Status(ctx)
+                                fmt.Printf("status = %v\n", st)
+
+				if st != scs.Unmodified {
+
 					responseCookie := &http.Cookie{
 						Name:     config.SessionManager.Cookie.Name,
 						Path:     config.SessionManager.Cookie.Path,
