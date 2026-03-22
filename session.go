@@ -50,13 +50,20 @@ func LoadAndSaveWithConfig(config SessionConfig) echo.MiddlewareFunc {
 			if err == nil {
 				token = cookie.Value
                                fmt.Printf("SCS token = %v\n", token)
-			}
+			} else {
+                               fmt.Printf("SCS cookie error  = %v\n", err)
+                        }
+
 
 			ctx, err = config.SessionManager.Load(ctx, token)
 			if err != nil {
                                fmt.Printf("---SCS load error\n")
 				return err
-			}
+			} else {
+                               fmt.Printf("ctx = %v\n", ctx)
+                        }
+
+
 
 			c.SetRequest(c.Request().WithContext(ctx))
 
